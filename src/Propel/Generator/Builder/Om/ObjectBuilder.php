@@ -260,6 +260,9 @@ abstract class ".$this->getUnqualifiedClassName().$parentClass." implements Acti
      */
     protected function addClassBody(&$script)
     {
+        if (!is_null($this->getBaseClass())) {
+            $this->declareClass($this->getBaseClass());
+        }
         $this->declareClassFromBuilder($this->getStubObjectBuilder());
         $this->declareClassFromBuilder($this->getStubQueryBuilder());
         $this->declareClassFromBuilder($this->getTableMapBuilder());
