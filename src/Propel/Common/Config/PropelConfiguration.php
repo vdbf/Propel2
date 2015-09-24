@@ -33,6 +33,7 @@ class PropelConfiguration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('propel');
 
         $this->addGeneralSection($rootNode);
+        $this->addExcludeTablesSection($rootNode);
         $this->addPathsSection($rootNode);
         $this->addDatabaseSection($rootNode);
         $this->addMigrationsSection($rootNode);
@@ -206,6 +207,17 @@ class PropelConfiguration implements ConfigurationInterface
         ;
     }
 
+    protected function addExcludeTablesSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('exclude_tables')
+                    ->prototype('scalar')->end()
+                ->end()
+            ->end()
+        ;
+    }
+
     protected function addRuntimeSection(ArrayNodeDefinition $node)
     {
         $node
@@ -237,13 +249,15 @@ class PropelConfiguration implements ConfigurationInterface
                                         ->arrayNode('time')
                                             ->addDefaultsIfNotSet()
                                             ->children()
+                                                ->scalarNode('name')->defaultValue('Time')->end()
                                                 ->integerNode('precision')->min(0)->defaultValue(3)->end()
                                                 ->integerNode('pad')->min(0)->defaultValue(8)->end()
                                             ->end()
                                         ->end()
-                                        ->arrayNode('memory')
+                                        ->arrayNode('mem')
                                             ->addDefaultsIfNotSet()
                                             ->children()
+                                                ->scalarNode('name')->defaultValue('Memory')->end()
                                                 ->integerNode('precision')->min(0)->defaultValue(3)->end()
                                                 ->integerNode('pad')->min(0)->defaultValue(8)->end()
                                             ->end()
@@ -251,6 +265,7 @@ class PropelConfiguration implements ConfigurationInterface
                                         ->arrayNode('memDelta')
                                             ->addDefaultsIfNotSet()
                                             ->children()
+                                                ->scalarNode('name')->defaultValue('Memory Delta')->end()
                                                 ->integerNode('precision')->min(0)->defaultValue(3)->end()
                                                 ->integerNode('pad')->min(0)->defaultValue(8)->end()
                                             ->end()
@@ -258,14 +273,15 @@ class PropelConfiguration implements ConfigurationInterface
                                         ->arrayNode('memPeak')
                                             ->addDefaultsIfNotSet()
                                             ->children()
+                                                ->scalarNode('name')->defaultValue('Memory Peak')->end()
                                                 ->integerNode('precision')->min(0)->defaultValue(3)->end()
                                                 ->integerNode('pad')->min(0)->defaultValue(8)->end()
                                             ->end()
                                         ->end()
                                     ->end()
                                 ->end()
-                                ->scalarNode('innerGlue')->defaultValue(':')->end()
-                                ->scalarNode('outerGlue')->defaultValue('|')->end()
+                                ->scalarNode('innerGlue')->defaultValue(': ')->end()
+                                ->scalarNode('outerGlue')->defaultValue(' | ')->end()
                             ->end()
                         ->end()
                     ->end()
